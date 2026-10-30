@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070b16">
+  <title>Sentinel // Traffic Observatory</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Sentinel home">
+        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span><b>SENTINEL</b><small>TRAFFIC OBSERVATORY</small></span>
+      </a>
+      <div class="topbar-meta"><span class="live-dot"></span><span>LOCAL SIMULATION</span><span class="divider"></span><span class="clock" id="clock">--:--:--</span></div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p class="kicker"><span class="pulse-line"></span> DEFENSE OPERATIONS / LAB 07</p>
+        <h1>See the signal<br><em>through the noise.</em></h1>
+        <p class="hero-copy">A bounded, synthetic traffic observatory. Model a burst, watch the detector learn its shape, and see mitigation restore capacity in real time.</p>
+      </div>
+      <div class="hero-badge"><span>SAFE MODE</span><strong>NO EXTERNAL<br>TRAFFIC</strong><small>IN-MEMORY DATASET</small></div>
+    </section>
+
+    <section class="commandbar glass">
+      <div class="command-label"><span class="command-icon">⌁</span><span><b>SIMULATION CONTROL</b><small>Choose a synthetic traffic profile</small></span></div>
+      <div class="scenario-toggle" role="group" aria-label="Scenario">
+        <button class="scenario-option active" data-scenario="normal"><span class="option-dot calm"></span>Normal flow</button>
+        <button class="scenario-option" data-scenario="excessive"><span class="option-dot danger"></span>Excessive burst</button>
+      </div>
+      <div class="command-actions">
+        <button id="start" class="primary"><span class="play">▶</span> Start simulation</button>
+        <button id="pause" class="icon-button" title="Pause simulation">Ⅱ</button>
+        <button id="reset" class="icon-button" title="Reset simulation">↻</button>
+      </div>
+      <div class="run-state"><span class="state-light"></span><span id="run-state">READY</span></div>
+    </section>
+
+    <section class="metric-grid">
+      <article class="metric-card glass"><div class="metric-top"><span>REQUESTS OBSERVED</span><span class="metric-icon cyan">↗</span></div><strong id="total">0</strong><div class="metric-foot"><span class="trend neutral">—</span><span>synthetic events</span></div></article>
+      <article class="metric-card glass"><div class="metric-top"><span>THREAT SIGNALS</span><span class="metric-icon pink">⌁</span></div><strong id="suspicious">0</strong><div class="metric-foot"><span class="trend danger" id="threat-percent">0%</span><span>of observed</span></div></article>
+      <article class="metric-card glass"><div class="metric-top"><span>EVENTS MITIGATED</span><span class="metric-icon violet">◇</span></div><strong id="blocked">0</strong><div class="metric-foot"><span class="trend violet-text">ACTIVE</span><span>blocks + limits</span></div></article>
+      <article class="metric-card glass"><div class="metric-top"><span>AVAILABILITY</span><span class="metric-icon green">◉</span></div><strong id="availability">100.0<span>%</span></strong><div class="metric-foot"><span class="trend good" id="health-label">HEALTHY</span><span>service health</span></div></article>
+    </section>
+
+    <section class="main-grid">
+      <article class="visual-card glass">
+        <div class="card-heading"><div><p class="eyebrow">LIVE TOPOLOGY</p><h2>Traffic field</h2></div><div class="legend"><span><i class="legend-dot before"></i>Incoming</span><span><i class="legend-dot after"></i>Accepted</span></div></div>
+        <div class="scene">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+          <div class="satellite sat-one"></div><div class="satellite sat-two"></div><div class="satellite sat-three"></div>
+          <div class="core"><div class="core-ring"></div><div class="core-ring ring-two"></div><div class="core-label"><span class="core-pulse"></span><b>CORE</b><small id="core-status">STANDBY</small></div></div>
+          <div class="node node-a"><span></span><b>EDGE 01</b><small>ONLINE</small></div><div class="node node-b"><span></span><b>EDGE 02</b><small>ONLINE</small></div><div class="node node-c"><span></span><b>EDGE 03</b><small>ONLINE</small></div>
+          <div class="traffic-particles" id="traffic-particles"></div><div class="scanline"></div>
+        </div>
+        <div class="scene-footer"><span><i class="mini-dot"></i> Nodes synchronized</span><span>CAPACITY <b id="capacity">25</b> RPS</span><span>LATENCY <b id="latency">18</b>ms</span></div>
+      </article>
+      <article class="chart-card glass">
+        <div class="card-heading"><div><p class="eyebrow">SIGNAL ANALYSIS</p><h2>Load trajectory</h2></div><span class="status-badge normal" id="status">NORMAL</span></div>
+        <div class="chart-wrap"><canvas id="traffic-chart" aria-label="Incoming and accepted traffic chart"></canvas><div class="chart-empty" id="chart-empty">Run a scenario to populate the field</div></div>
+        <div class="chart-stats"><div><span>BEFORE MITIGATION</span><b class="pink-text" id="before">0</b></div><div><span>AFTER MITIGATION</span><b class="green-text" id="after">0</b></div><div><span>ELAPSED</span><b><span id="elapsed">0.0</span><small>s</small></b></div></div>
+      </article>
+    </section>
+
+    <section class="lower-grid">
+      <article class="feed-card glass"><div class="card-heading"><div><p class="eyebrow">EVENT STREAM</p><h2>Detection feed</h2></div><span class="stream-status"><i></i> LIVE</span></div><div class="feed" id="reasons"><div class="feed-empty"><span>◌</span><p>Awaiting signal input</p><small>Start a simulation to inspect synthetic events</small></div></div></article>
+      <article class="health-card glass"><div class="card-heading"><div><p class="eyebrow">SYSTEM RESILIENCE</p><h2>Mitigation impact</h2></div><span class="shield">♢</span></div><div class="health-bar"><div class="bar-label"><span>Capacity preserved</span><b id="preserved">100%</b></div><div class="bar-track"><i id="preserved-bar"></i></div></div><div class="health-details"><div><span>ACCEPTED AFTER FILTER</span><b id="accepted">0</b></div><div><span>LOCAL CPU</span><b id="system-cpu">0%</b></div><div><span>LOCAL MEMORY</span><b id="system-memory">0%</b></div></div><div class="safe-note"><span>✦</span><p><b>Simulation boundary</b><br>Traffic is synthetic. CPU and memory are read from this local machine only; no packets or real users are collected.</p></div></article>
+    </section>
+    <footer><span>SENTINEL SYSTEMS / EDUCATIONAL BUILD</span><span>BOUNDED TO 300 EVENTS · 10 SECONDS</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
