@@ -5,7 +5,12 @@
 **Project type:** Full-stack educational security visualization  
 **Implementation:** Python, Flask, HTML, CSS, and JavaScript  
 **Execution model:** Bounded, in-memory simulation with optional local CPU/memory telemetry  
-**Application URL:** `http://127.0.0.1:5000` locally, or the Render service URL after deployment
+
+## Live Demo
+
+**Open the deployed application:** [sentinel-traffic-observatory.onrender.com](https://sentinel-traffic-observatory.onrender.com/)
+
+The public demo is hosted on Render and serves the Flask application, API, and interactive dashboard. The local URL remains available for development: `http://127.0.0.1:5000`.
 
 ---
 
